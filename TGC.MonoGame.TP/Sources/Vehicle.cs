@@ -17,7 +17,7 @@ namespace TGC.MonoGame.TP.Sources
         // Fin del TODO
 
         // Atributos del auto.
-        private const float carAcceleration = 1000f;
+        private const float carAcceleration = 5000f;
         private const float carJumpAcceleration = 50000f;
         private const float rotationVelocity = 2f;
 
@@ -27,12 +27,12 @@ namespace TGC.MonoGame.TP.Sources
         // Estado del auto.
         private Vector3 currentVelocity;
         private Vector3 currentAceleration;
-        private float vehicleScale = 0.05f;
+        private float vehicleScale = 0.5f;
 
 		public Vehicle(ContentManager content)
 		{
-			Model = content.Load<Model>(Resources.ContentModels + "VehicleC/VehicleC");
-			World = Matrix.Identity;
+			Model = content.Load<Model>(Resources.ContentModels + "VehicleA/VehicleA");
+			World = Matrix.CreateScale(vehicleScale) * Matrix.CreateRotationY(MathF.PI) * Matrix.Identity;
 		}
 
 		public void Draw(GameTime gameTime, Matrix view, Matrix projection)
@@ -48,7 +48,7 @@ namespace TGC.MonoGame.TP.Sources
 			float deltaRot = CalculateDeltaRotation(deltaTime, GetMoveDirection(keyboardState));
 			Vector3 deltaMov = CalculateDeltaMovement(deltaTime, GetMoveDirection(keyboardState));
 
-			World = Matrix.CreateRotationY(deltaRot) * World;
+            World = Matrix.CreateRotationY(deltaRot) * World;
 			World = World * Matrix.CreateTranslation(deltaMov);
 		}
 
@@ -56,9 +56,9 @@ namespace TGC.MonoGame.TP.Sources
         {
             Vector3 moveDirection = Vector3.Zero;
             if (keyboardState.IsKeyDown(Keys.W) || keyboardState.IsKeyDown(Keys.Up))
-                moveDirection = Vector3.Forward;
-            else if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
                 moveDirection = Vector3.Backward;
+            else if (keyboardState.IsKeyDown(Keys.S) || keyboardState.IsKeyDown(Keys.Down))
+                moveDirection = Vector3.Forward;
 
             if (keyboardState.IsKeyDown(Keys.A) || keyboardState.IsKeyDown(Keys.Left))
                 moveDirection += Vector3.Left;
